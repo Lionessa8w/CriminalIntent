@@ -5,7 +5,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -36,6 +38,7 @@ class CrimeListFragment: Fragment() {
         val view=inflater.inflate(R.layout.fragment_crime_list,container, false)
         crimeRecyclerView=view.findViewById(R.id.crime_recycler_view) as RecyclerView
         crimeRecyclerView.layoutManager=LinearLayoutManager(context)
+        updateUI()
         return view
     }
 
@@ -50,10 +53,36 @@ class CrimeListFragment: Fragment() {
             return CrimeListFragment()
         }
     }
-    private inner class CrimeHolder(view: View):RecyclerView.ViewHolder(view){
+    private inner class CrimeHolder(view: View): RecyclerView.ViewHolder(view),
+        View.OnClickListener{
+
+
+        private lateinit var crime: Crime
 
         val titleTextView: TextView=itemView.findViewById(R.id.crime_title)
         val dateTextView:TextView=itemView.findViewById(R.id.crime_data)
+        val solvedImageView:ImageView=itemView.findViewById(R.id.crime_solved)
+
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        //Получив объект Crime для привязки, CrimeHolder будет
+        //обновлять название и дату соответствующего престулпения.
+        fun bind(crime: Crime) {
+            this.crime=crime
+            titleTextView.text=this.crime.title
+            dateTextView.text=this.crime.date.toString()
+            solvedImageView.visibility=if (crime.isSolved){
+                View.VISIBLE
+            }else{
+                View.GONE
+            }
+        }
+
+        override fun onClick(v: View) {
+            Toast.makeText(context,"${crime.title} pressed!", Toast.LENGTH_LONG ).show()
+        }
 
     }
     private inner class CrimeAdapter(var crimes:List<Crime>)
@@ -70,10 +99,7 @@ class CrimeListFragment: Fragment() {
         //отвечает за заполнение данного холдера
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
             val crime=crimes[position]
-            holder.apply {
-                titleTextView.text=crime.title
-                dateTextView.text=crime.date.toString()
-            }
+            holder.bind(crime)//RecyclerView запрашивает привязку CrimeHolder к конкретному преступлению.
         }
 
     }
