@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import java.time.format.DateTimeFormatter
 
 class CrimeFragment : Fragment() {
     private lateinit var crime: Crime
@@ -38,6 +39,7 @@ class CrimeFragment : Fragment() {
 
         dateButton.apply {
             text=crime.date.toString()
+                //.format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
             isEnabled=false
         }
 

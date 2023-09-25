@@ -1,5 +1,6 @@
 package com.bignerdranch.android.criminalintent
 
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,10 +9,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.time.format.DateTimeFormatter
 
 private const val TAG="CrimeListFragment"
 
@@ -69,10 +72,12 @@ class CrimeListFragment: Fragment() {
 
         //Получив объект Crime для привязки, CrimeHolder будет
         //обновлять название и дату соответствующего престулпения.
+
+
         fun bind(crime: Crime) {
             this.crime=crime
             titleTextView.text=this.crime.title
-            dateTextView.text=this.crime.date.toString()
+            dateTextView.text=this.crime.date.toString().format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
             solvedImageView.visibility=if (crime.isSolved){
                 View.VISIBLE
             }else{
@@ -97,6 +102,8 @@ class CrimeListFragment: Fragment() {
         override fun getItemCount(): Int =crimes.size
 
         //отвечает за заполнение данного холдера
+
+
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
             val crime=crimes[position]
             holder.bind(crime)//RecyclerView запрашивает привязку CrimeHolder к конкретному преступлению.
