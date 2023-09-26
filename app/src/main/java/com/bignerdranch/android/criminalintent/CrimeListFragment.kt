@@ -14,17 +14,19 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.Date
 
-private const val TAG="CrimeListFragment"
+private const val TAG = "CrimeListFragment"
 
-class CrimeListFragment: Fragment() {
+class CrimeListFragment : Fragment() {
 
     private lateinit var crimeRecyclerView: RecyclerView
-    private var adapter:CrimeAdapter?= null
+    private var adapter: CrimeAdapter? = null
 
 
-    private val crimeListViewModel:CrimeListViewModel by lazy {
+    private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProviders.of(this)[CrimeListViewModel::class.java]
     }
 
@@ -38,33 +40,35 @@ class CrimeListFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view=inflater.inflate(R.layout.fragment_crime_list,container, false)
-        crimeRecyclerView=view.findViewById(R.id.crime_recycler_view) as RecyclerView
-        crimeRecyclerView.layoutManager=LinearLayoutManager(context)
+        val view = inflater.inflate(R.layout.fragment_crime_list, container, false)
+        crimeRecyclerView = view.findViewById(R.id.crime_recycler_view) as RecyclerView
+        crimeRecyclerView.layoutManager = LinearLayoutManager(context)
         updateUI()
         return view
     }
 
-    private fun updateUI(){
+    private fun updateUI() {
         val crimes = crimeListViewModel.crimes
-        adapter=CrimeAdapter(crimes)
-        crimeRecyclerView.adapter=adapter
+        adapter = CrimeAdapter(crimes)
+        crimeRecyclerView.adapter = adapter
     }
-    companion object{
+
+    companion object {
         //для activity, для получения экземпляра фрагмента
-        fun newInstance():CrimeListFragment{
+        fun newInstance(): CrimeListFragment {
             return CrimeListFragment()
         }
     }
-    private inner class CrimeHolder(view: View): RecyclerView.ViewHolder(view),
-        View.OnClickListener{
+
+    private inner class CrimeHolder(view: View) : RecyclerView.ViewHolder(view),
+        View.OnClickListener {
 
 
         private lateinit var crime: Crime
 
-        val titleTextView: TextView=itemView.findViewById(R.id.crime_title)
-        val dateTextView:TextView=itemView.findViewById(R.id.crime_data)
-        val solvedImageView:ImageView=itemView.findViewById(R.id.crime_solved)
+        val titleTextView: TextView = itemView.findViewById(R.id.crime_title)
+        val dateTextView: TextView = itemView.findViewById(R.id.crime_data)
+        val solvedImageView: ImageView = itemView.findViewById(R.id.crime_solved)
 
         init {
             itemView.setOnClickListener(this)
@@ -75,37 +79,45 @@ class CrimeListFragment: Fragment() {
 
 
         fun bind(crime: Crime) {
-            this.crime=crime
-            titleTextView.text=this.crime.title
-            dateTextView.text=this.crime.date.toString().format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
-            solvedImageView.visibility=if (crime.isSolved){
+            this.crime = crime
+            titleTextView.text = this.crime.title
+            dateTextView.text =
+                this.crime.date.toString().format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
+            dateTextView.text = this.crime.date.format("EEEE, MMM d, YYYY")
+            solvedImageView.visibility = if (crime.isSolved) {
                 View.VISIBLE
-            }else{
+            } else {
                 View.GONE
             }
         }
 
+        private fun Date.format(pattern: String): String {
+            val simpleDateFormat = SimpleDateFormat(pattern)
+            return simpleDateFormat.format(this)
+        }
+
         override fun onClick(v: View) {
-            Toast.makeText(context,"${crime.title} pressed!", Toast.LENGTH_LONG ).show()
+            Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_LONG).show()
         }
 
     }
-    private inner class CrimeAdapter(var crimes:List<Crime>)
-        : RecyclerView.Adapter<CrimeHolder>() {
+
+    private inner class CrimeAdapter(var crimes: List<Crime>) :
+        RecyclerView.Adapter<CrimeHolder>() {
         //создание представления на дисплее, оборачивает его в холдер и возвращает результат.
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
-            val view=layoutInflater.inflate(R.layout.list_item_crime, parent, false)
+            val view = layoutInflater.inflate(R.layout.list_item_crime, parent, false)
             return CrimeHolder(view)
         }
 
         //возвращает количество элементов в списке преступлений,
-        override fun getItemCount(): Int =crimes.size
+        override fun getItemCount(): Int = crimes.size
 
         //отвечает за заполнение данного холдера
 
 
         override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
-            val crime=crimes[position]
+            val crime = crimes[position]
             holder.bind(crime)//RecyclerView запрашивает привязку CrimeHolder к конкретному преступлению.
         }
 

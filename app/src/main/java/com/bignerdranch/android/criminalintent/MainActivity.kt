@@ -9,12 +9,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         /*запрос фрагмета с идентификатором контейнерного представления*/
-        val currentFragment=supportFragmentManager.findFragmentById(R.id.fragment_container)
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
         //если фрагмент отсутствует, создаем новый фрагмент и добавляем его в список
-        if (currentFragment==null){
-            val fragment=CrimeListFragment.newInstance()
+        if (currentFragment == null) {
+            val fragment = CrimeListFragment.newInstance()
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container,fragment)
+                .add(R.id.fragment_container, fragment)
                 .commit()
         }
     }

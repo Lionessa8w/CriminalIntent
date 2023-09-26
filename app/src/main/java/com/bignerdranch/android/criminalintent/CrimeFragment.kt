@@ -29,18 +29,19 @@ class CrimeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view= inflater.inflate(R.layout.fragment_crime, container, false)
+        val view = inflater.inflate(R.layout.fragment_crime, container, false)
 
-        titleField=view.findViewById(R.id.crime_title) as EditText//'as' небезопасное приведение типов
+        titleField =
+            view.findViewById(R.id.crime_title) as EditText//'as' небезопасное приведение типов
 
-        dateButton=view.findViewById(R.id.crime_data) as Button
+        dateButton = view.findViewById(R.id.crime_data) as Button
 
-        solvedCheckBox=view.findViewById(R.id.crime_solved) as CheckBox
+        solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
 
         dateButton.apply {
-            text=crime.date.toString()
-                //.format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
-            isEnabled=false
+            text = crime.date.toString()
+            //.format(DateTimeFormatter.ofPattern("EEEE, MMM d, YYYY"))
+            isEnabled = false
         }
 
         return view
@@ -50,21 +51,26 @@ class CrimeFragment : Fragment() {
         /*Установка слушателя в onStart() позволяет избежать такого поведения,
          так как слушатель подключается после восстановления состояния виджета.*/
         super.onStart()
-        val titleWatcher=object : TextWatcher{
+        val titleWatcher = object : TextWatcher {
 
-            override fun beforeTextChanged(sequence: CharSequence?,
-                                           start: Int,
-                                           count: Int,
-                                           after: Int) {
+            override fun beforeTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                count: Int,
+                after: Int
+            ) {
 
 
             }
+
             //функция для создания заголовка, то что вводит пользователь преобразовывается в стринг
-            override fun onTextChanged(sequence: CharSequence?,
-                                       start: Int,
-                                       before: Int,
-                                       count: Int) {
-                crime.title=sequence.toString()
+            override fun onTextChanged(
+                sequence: CharSequence?,
+                start: Int,
+                before: Int,
+                count: Int
+            ) {
+                crime.title = sequence.toString()
             }
 
             override fun afterTextChanged(sequence: Editable?) {
@@ -75,7 +81,7 @@ class CrimeFragment : Fragment() {
 
         solvedCheckBox.apply {
             setOnCheckedChangeListener { _, isChecked ->
-                crime.isSolved=isChecked
+                crime.isSolved = isChecked
             }
         }
     }
