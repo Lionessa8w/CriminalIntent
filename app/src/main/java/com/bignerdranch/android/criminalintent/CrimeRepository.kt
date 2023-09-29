@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.room.Database
 import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDao
@@ -28,8 +29,8 @@ class CrimeRepository private constructor(context: Context) {
         ).build()
     private val crimeDao= database.crimeDao()
 
-    fun getCrimes():List<Crime> =crimeDao.getCrime()
-    fun getCrime(id:UUID): Crime?=crimeDao.getCrime(id)
+    fun getCrimes():LiveData<List<Crime>> =crimeDao.getCrime()
+    fun getCrime(id:UUID): LiveData<Crime>?=crimeDao.getCrime(id)
 
     //синглтон, сущ только один экземпляр класса
     companion object {
