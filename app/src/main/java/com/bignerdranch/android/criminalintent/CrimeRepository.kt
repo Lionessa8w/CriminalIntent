@@ -7,6 +7,8 @@ import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDao
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase
 import java.util.UUID
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME="crime-database"
 class CrimeRepository private constructor(context: Context) {
@@ -29,8 +31,21 @@ class CrimeRepository private constructor(context: Context) {
         ).build()
     private val crimeDao= database.crimeDao()
 
+    private val executor= Executors.newSingleThreadExecutor()//  создали фоновый поток
+
     fun getCrimes():LiveData<List<Crime>> =crimeDao.getCrime()
     fun getCrime(id:UUID): LiveData<Crime>?=crimeDao.getCrime(id)
+
+    fun updateCrime(crime: Crime){
+        executor.execute {
+            crimeDao.updateCrime(crime)
+        }
+    }
+    fun addCrime(crime: Crime){
+        executor.execute {
+            crimeDao.addCrime(crime)
+        }
+    }
 
     //синглтон, сущ только один экземпляр класса
     companion object {
