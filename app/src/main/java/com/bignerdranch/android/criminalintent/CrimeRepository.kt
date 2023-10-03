@@ -2,16 +2,14 @@ package com.bignerdranch.android.criminalintent
 
 import android.content.Context
 import androidx.lifecycle.LiveData
-import androidx.room.Database
 import androidx.room.Room
-import com.bignerdranch.android.criminalintent.database.CrimeDao
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase.Companion.migration_1_2
 import java.util.UUID
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-private const val DATABASE_NAME="crime-database"
+private const val DATABASE_NAME = "crime-database"
+
 class CrimeRepository private constructor(context: Context) {
 
     /*Функция Room.databaseBuilder()
@@ -24,26 +22,27 @@ class CrimeRepository private constructor(context: Context) {
          Второй параметр — это класс базы данных,
          которую Room должен создать. Третий — имя файла базы данных, которую создаст Room.
      */
-    private val database: CrimeDataBase=
+    private val database: CrimeDataBase =
         Room.databaseBuilder(
             context.applicationContext,
             CrimeDataBase::class.java,
             DATABASE_NAME
         ).addMigrations(migration_1_2)
             .build()
-    private val crimeDao= database.crimeDao()
+    private val crimeDao = database.crimeDao()
 
-    private val executor= Executors.newSingleThreadExecutor()//  создали фоновый поток
+    private val executor = Executors.newSingleThreadExecutor()//  создали фоновый поток
 
-    fun getCrimes():LiveData<List<Crime>> =crimeDao.getCrime()
-    fun getCrime(id:UUID): LiveData<Crime>?=crimeDao.getCrime(id)
+    fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrime()
+    fun getCrime(id: UUID): LiveData<Crime>? = crimeDao.getCrime(id)
 
-    fun updateCrime(crime: Crime){
+    fun updateCrime(crime: Crime) {
         executor.execute {
             crimeDao.updateCrime(crime)
         }
     }
-    fun addCrime(crime: Crime){
+
+    fun addCrime(crime: Crime) {
         executor.execute {
             crimeDao.addCrime(crime)
         }

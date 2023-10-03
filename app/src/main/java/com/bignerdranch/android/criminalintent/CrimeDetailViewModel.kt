@@ -6,19 +6,22 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import java.util.UUID
 
-class CrimeDetailViewModel: ViewModel() {
-    private val crimeRepository=CrimeRepository.get()
-    private val crimeIdLiveData= MutableLiveData<UUID>()
+class CrimeDetailViewModel : ViewModel() {
+    private val crimeRepository = CrimeRepository.get()
+    private val crimeIdLiveData = MutableLiveData<UUID>()
 
-    var crimeLiveData:LiveData<Crime?> =
-        Transformations.switchMap(crimeIdLiveData){
+    var crimeLiveData: LiveData<Crime?> =
+        Transformations.switchMap(crimeIdLiveData) {
             //вот тут ругается
-            crimeId->crimeRepository.getCrime(crimeId) as LiveData<Crime?>
+                crimeId ->
+            crimeRepository.getCrime(crimeId) as LiveData<Crime?>
         }
-    fun loadCrime(crimeId:UUID){
-        crimeIdLiveData.value=crimeId
+
+    fun loadCrime(crimeId: UUID) {
+        crimeIdLiveData.value = crimeId
     }
-    fun saveCrime(crime: Crime){
+
+    fun saveCrime(crime: Crime) {
         crimeRepository.updateCrime(crime)
     }
 

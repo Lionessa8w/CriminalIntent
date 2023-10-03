@@ -11,6 +11,7 @@ import com.bignerdranch.android.criminalintent.Crime
 @TypeConverters(CrimeTypeConverters::class)// указываем конвертер БД
 abstract class CrimeDataBase : RoomDatabase() {
     abstract fun crimeDao(): CrimeDao
+
     companion object {
         val migration_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
