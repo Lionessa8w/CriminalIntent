@@ -12,6 +12,7 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import java.text.DateFormat
 import java.util.Date
 import java.util.UUID
 
@@ -19,6 +20,7 @@ private const val ARG_CRIME_ID="crime_id"
 private const val TAG="CrimeFragment"
 private const val DIALOG_DATE="DialogDate"
 private const val REQUEST_DATE=0
+private const val DATE_FORMAT="EEE, MMM, dd"
 class CrimeFragment : Fragment(),DatePickerFragment.Callbacks {
     private lateinit var crime: Crime
     private lateinit var titleField: EditText
@@ -128,6 +130,16 @@ class CrimeFragment : Fragment(),DatePickerFragment.Callbacks {
             isChecked=crime.isSolved
             jumpDrawablesToCurrentState()
         }
+    }
+
+    private fun getCrimeReport(): String{
+        val solvedString=if (crime.isSolved){
+            getString(R.string.crime_report_solved)
+        }else{
+            getString(R.string.crime_report_unsolved)
+        }
+        val dataString= DateFormat.format(DATE_FORMAT,
+            crime.date).toString()
     }
 
     companion object{

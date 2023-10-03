@@ -6,6 +6,7 @@ import androidx.room.Database
 import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDao
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase
+import com.bignerdranch.android.criminalintent.database.CrimeDataBase.Companion.migration_1_2
 import java.util.UUID
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
@@ -28,7 +29,8 @@ class CrimeRepository private constructor(context: Context) {
             context.applicationContext,
             CrimeDataBase::class.java,
             DATABASE_NAME
-        ).build()
+        ).addMigrations(migration_1_2)
+            .build()
     private val crimeDao= database.crimeDao()
 
     private val executor= Executors.newSingleThreadExecutor()//  создали фоновый поток
