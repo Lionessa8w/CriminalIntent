@@ -27,6 +27,9 @@
             android:authorities="com.bignerdranch.android.criminalintent.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE-PROVIDER_PATHS"
+                android:resource="@xml/files"/>
 
         </provider>
 

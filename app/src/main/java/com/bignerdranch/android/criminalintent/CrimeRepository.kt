@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Room
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase
 import com.bignerdranch.android.criminalintent.database.CrimeDataBase.Companion.migration_1_2
+import java.io.File
 import java.util.UUID
 import java.util.concurrent.Executors
 
@@ -32,6 +33,7 @@ class CrimeRepository private constructor(context: Context) {
     private val crimeDao = database.crimeDao()
 
     private val executor = Executors.newSingleThreadExecutor()//  создали фоновый поток
+    private val filesDir = context.applicationContext.filesDir
 
     fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrime()
     fun getCrime(id: UUID): LiveData<Crime>? = crimeDao.getCrime(id)
@@ -47,6 +49,10 @@ class CrimeRepository private constructor(context: Context) {
             crimeDao.addCrime(crime)
         }
     }
+
+    fun getPhotoFile(crime: Crime): File =
+        File(filesDir, crime.photoFileName)
+
 
     //синглтон, сущ только один экземпляр класса
     companion object {
