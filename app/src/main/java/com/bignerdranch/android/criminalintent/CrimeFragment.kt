@@ -166,6 +166,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             if (resolvedActivity == null) {
                 isEnabled = false
             }
+        }
 
             photoButton.apply {
                 val packageManager: PackageManager = requireActivity().packageManager
@@ -189,8 +190,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                     }
                     startActivityForResult(captureImage, REQUEST_PHOTO)
                 }
-            }
-            //return view так написано в книге
+
+            //return view так написано в книге 532
         }
     }
 
