@@ -51,7 +51,7 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var photoButton: ImageButton
     private lateinit var photoFile: File
     private lateinit var photoUri: Uri
-    var directory: File? = null
+    private var directory: File? = null
     private val crimeDetailViewModel: CrimeDetailViewModel by lazy {
         ViewModelProviders.of(this)[CrimeDetailViewModel::class.java]
     }
