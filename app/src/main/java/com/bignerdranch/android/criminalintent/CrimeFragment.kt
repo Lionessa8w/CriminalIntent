@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import java.io.File
+import java.net.URI
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.UUID
@@ -38,7 +39,7 @@ private const val DIALOG_DATE = "DialogDate"
 private const val REQUEST_DATE = 0
 private const val REQUEST_CONTACT = 1
 private const val REQUEST_PHOTO = 2
-private const val DATE_FORMAT = "EEE, MMM, dd"
+private const val DATE_FORMAT = "dd, MMM, EEE"
 
 class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
     private lateinit var crime: Crime
@@ -184,6 +185,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
             val captureImage = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             photoButton.setOnClickListener {
                 val photoPath = generateFileUri()
+                val photoURI = URI.create(photoPath.toString())
+                photoFile = File(photoURI)
                 captureImage.putExtra(MediaStore.EXTRA_OUTPUT, photoPath)
                 val cameraActivities: List<ResolveInfo> = packageManager
                     .queryIntentActivities(captureImage, PackageManager.MATCH_DEFAULT_ONLY)
@@ -202,8 +205,15 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         }
     }
 
-    private fun generateFileUri(): Uri? {
-        val file: File? = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/${Random.nextInt(0, Int.MAX_VALUE)}")
+    private fun generateFileUri(): Uri {
+        val file: File? = Environment.getExternalStoragePublicDirectory(
+            Environment.DIRECTORY_PICTURES + "/${
+                Random.nextInt(
+                    0,
+                    Int.MAX_VALUE
+                )
+            }"
+        )
         return Uri.fromFile(file)
     }
 
@@ -245,16 +255,18 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         }
         updatePhotoView()
     }
+
     //506str
-    private fun updatePhotoView(){
-        if(photoFile.exists()){
-            val bitmap= getScaledBitmap(photoFile.path, requireActivity())
+    private fun updatePhotoView() {
+        if (photoFile.exists()) {
+            val bitmap = getScaledBitmap(photoFile.path, requireActivity())
             photoView.setImageBitmap(bitmap)
-        }else{
+        } else {
             photoView.setImageDrawable(null)
-            Log.i(REQUEST_PHOTO.toString(),"updatePhotoView")
+            Log.i(REQUEST_PHOTO.toString(), "updatePhotoView")
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         when {
             requestCode == REQUEST_CONTACT && data != null -> {
@@ -275,7 +287,8 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
                     suspectButton.text = suspect
                 }
             }
-            requestCode== REQUEST_PHOTO->{
+
+            requestCode == REQUEST_PHOTO -> {
                 updatePhotoView()
             }
 
