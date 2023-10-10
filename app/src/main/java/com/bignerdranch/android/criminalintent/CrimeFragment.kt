@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.net.Uri
+import android.os.Build.VERSION_CODES.R
 import android.os.Bundle
 import android.os.Environment
 import android.os.StrictMode
@@ -76,18 +77,18 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val view = inflater.inflate(R.layout.fragment_crime, container, false)
 
         titleField =
-            view.findViewById(R.id.crime_title) as EditText//'as' небезопасное приведение типов
+            view.findViewById(R.id.crime_title)//'as' небезопасное приведение типов
 
-        dateButton = view.findViewById(R.id.crime_data) as Button
+        dateButton = view.findViewById(R.id.crime_data)
 
-        solvedCheckBox = view.findViewById(R.id.crime_solved) as CheckBox
-        reportButton = view.findViewById(R.id.crime_report) as Button
-        suspectButton = view.findViewById(R.id.crime_suspect) as Button
-        photoView = view.findViewById(R.id.crime_photo) as ImageView
+        solvedCheckBox = view.findViewById(R.id.crime_solved)
+        reportButton = view.findViewById(R.id.crime_report)
+        suspectButton = view.findViewById(R.id.crime_suspect)
+        photoView = view.findViewById(R.id.crime_photo)
         photoButton = view.findViewById(R.id.crime_camera)
 
         return view
@@ -298,18 +299,18 @@ class CrimeFragment : Fragment(), DatePickerFragment.Callbacks {
 
     private fun getCrimeReport(): String {
         val solvedString = if (crime.isSolved) {
-            getString(R.string.crime_report_solved)
+            getString(R.strings.crime_report_solved)
         } else {
-            getString(R.string.crime_report_unsolved)
+            getString(R.strings.crime_report_unsolved)
         }
         val simpleDateFormat = SimpleDateFormat(DATE_FORMAT)
         val dataString = simpleDateFormat.format(crime.date)
         val suspect = if (crime.suspect.isBlank()) {
-            getString(R.string.crime_report_suspect)
+            getString(R.strings.crime_report_suspect)
         } else {
-            getString(R.string.crime_report_suspect, crime.suspect)
+            getString(R.strings.crime_report_suspect, crime.suspect)
         }
-        return getString(R.string.crime_report, crime.title, dataString, solvedString, suspect)
+        return getString(R.strings.crime_report, crime.title, dataString, solvedString, suspect)
     }
 
     companion object {
